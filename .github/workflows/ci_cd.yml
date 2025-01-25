@@ -20,7 +20,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        role-to-assume: arn:aws:iam::123456789012:role/github-actions-brunoserraoliveira-pipeline
+        
         aws-region: us-east-2
 
     - name: Set up Terraform
@@ -53,7 +53,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        role-to-assume: arn:aws:iam::123456789012:role/github-actions-brunoserraoliveira-pipeline
+        
         aws-region: us-east-2
 
     - name: Setup Terraform
