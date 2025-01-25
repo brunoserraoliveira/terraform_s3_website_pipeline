@@ -18,26 +18,25 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+        role-to-assume: arn:aws:iam::123456789012:role/github-actions-brunoserraoliveira-pipeline
+        aws-region: us-east-2
 
-    - name: Setup Terraform
+    - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.0
 
-    - name: Terraform Init
+    - name: Initialize Terraform
       run: terraform init
+      working-directory: ./terraform_s3_website
 
-    - name: Terraform Apply
+    - name: Apply Terraform
       run: terraform apply -auto-approve
+      working-directory: ./terraform_s3_website
 
-    - name: Sync files to S3
+    - name: Sync S3 bucket
       run: |
-        aws s3 cp site/index.html s3://formacao-devops-bruno-oliver/index.html
-        aws s3 cp site/error.html s3://formacao-devops-bruno-oliver/error.html
-        aws s3 cp site/logos/terraform.png s3://formacao-devops-bruno-oliver/logos/terraform.png
-        aws s3 cp site/logos/aws.png s3://formacao-devops-bruno-oliver/logos/aws.png
-        aws s3 cp site/logos/github-actions.png s3://formacao-devops-bruno-oliver/logos/github-actions.png
+        aws s3 sync site/ s3://formacao-devops-bruno-oliveira --delete
 
   destroy:
     if: github.ref == 'refs/heads/destroy'
@@ -50,15 +49,16 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+        role-to-assume: arn:aws:iam::123456789012:role/github-actions-brunoserraoliveira-pipeline
+        aws-region: us-east-2
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
 
     - name: Terraform Init
       run: terraform init
+      working-directory: ./terraform_s3_website
 
     - name: Terraform Destroy
       run: terraform destroy -auto-approve
+      working-directory: ./terraform_s3_website
