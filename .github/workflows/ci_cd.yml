@@ -20,11 +20,9 @@ jobs:
 
     - name: Initialize Terraform
       run: terraform init
-      working-directory: ./terraform_s3_website
 
     - name: Apply Terraform
       run: terraform apply -auto-approve
-      working-directory: ./terraform_s3_website
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
