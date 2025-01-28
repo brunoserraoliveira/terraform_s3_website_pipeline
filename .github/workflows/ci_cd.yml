@@ -23,4 +23,5 @@ jobs:
                 export AWS_REGION="us-east-2"
 
                 terraform init
+                terraform plan
                 terraform apply -auto-approve

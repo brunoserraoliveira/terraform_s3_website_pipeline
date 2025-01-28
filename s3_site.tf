@@ -38,6 +38,13 @@ resource "aws_s3_bucket_policy" "website_policy" {
   bucket = aws_s3_bucket.website_bucket.id
 
   policy = data.aws_iam_policy_document.website_allow_public_access.json
+
+  depends_on = [
+    aws_s3_bucket.website_bucket,
+    aws_s3_bucket_public_access_block.website_public_access_block,
+    aws_s3_bucket_versioning.website_versioning,
+    aws_s3_bucket_website_configuration.website
+  ]
 }
 
 data "aws_iam_policy_document" "website_allow_public_access" {
@@ -62,6 +69,8 @@ resource "aws_s3_object" "index" {
   content_type = "text/html; charset=utf-8"
   source       = "site/index.html"
   etag         = filemd5("site/index.html")
+
+  depends_on = [aws_s3_bucket_policy.website_policy]
 }
 
 resource "aws_s3_object" "error" {
@@ -70,6 +79,8 @@ resource "aws_s3_object" "error" {
   content_type = "text/html; charset=utf-8"
   source       = "site/error.html"
   etag         = filemd5("site/error.html")
+
+  depends_on = [aws_s3_bucket_policy.website_policy]
 }
 
 resource "aws_s3_object" "terraform_logo" {
@@ -78,6 +89,8 @@ resource "aws_s3_object" "terraform_logo" {
   content_type = "image/png"
   source       = "site/logos/terraform.png"
   etag         = filemd5("site/logos/terraform.png")
+
+  depends_on = [aws_s3_bucket_policy.website_policy]
 }
 
 resource "aws_s3_object" "aws_logo" {
@@ -86,6 +99,8 @@ resource "aws_s3_object" "aws_logo" {
   content_type = "image/png"
   source       = "site/logos/aws.png"
   etag         = filemd5("site/logos/aws.png")
+
+  depends_on = [aws_s3_bucket_policy.website_policy]
 }
 
 resource "aws_s3_object" "github_actions_logo" {
@@ -94,4 +109,6 @@ resource "aws_s3_object" "github_actions_logo" {
   content_type = "image/png"
   source       = "site/logos/github-actions.png"
   etag         = filemd5("site/logos/github-actions.png")
+
+  depends_on = [aws_s3_bucket_policy.website_policy]
 }
